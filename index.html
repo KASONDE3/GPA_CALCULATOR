@@ -232,8 +232,8 @@
             inputGroup.innerHTML = `
                 <input type="text" name="${year}-course[]" placeholder="Course Name" required>
                 <div>
-                    <label><input type="radio" name="${year}-credit-${courseCount}" value="30" required> 30</label>
-                    <label><input type="radio" name="${year}-credit-${courseCount}" value="15" required> 15</label>
+                    <label><input type="radio" name="${year}-credit-${courseCount}" value="30" required> Full Course</label>
+                    <label><input type="radio" name="${year}-credit-${courseCount}" value="15" required> Half Course</label>
                 </div>
                 <select name="${year}-grade[]" required>
                     ${gradeOptions.map(option => `<option value="${option.value}">${option.label}</option>`).join('')}
