@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GPA Calculator for 1st to 7th Year</title>
-    <style>
+        <style>
         /* General Styling */
         body {
             font-family: 'Arial', sans-serif;
@@ -20,11 +20,11 @@
 
         h1 {
             margin-bottom: 30px;
-            font-size: 2.5rem;
+            font-size: 2rem;
         }
 
         .section-header {
-            font-size: 1.8rem;
+            font-size: 1.2rem;
             margin-bottom: 10px;
             text-transform: uppercase;
             border-bottom: 2px solid #fff;
@@ -32,19 +32,19 @@
         }
 
         .section {
-            margin-bottom: 40px;
+            margin-bottom: 20px;
             background-color: rgba(255, 255, 255, 0.2);
             border-radius: 10px;
-            padding: 20px;
+            padding: 15px;
             box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
         }
 
         .input-group {
             display: flex;
-            gap: 15px;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 10px;
             align-items: center;
-            margin-bottom: 15px;
-            flex-wrap: nowrap;
         }
 
         .input-group input[type="text"] {
@@ -52,8 +52,15 @@
             border: none;
             border-radius: 5px;
             font-size: 1rem;
-            flex: 1;
-            min-width: 150px;
+            flex: 1 1 auto;
+            min-width: 100px;
+        }
+
+        .input-group div {
+            flex: 1 1 auto;
+            display: flex;
+            gap: 5px;
+            justify-content: center;
         }
 
         .input-group select {
@@ -61,16 +68,12 @@
             border: none;
             border-radius: 5px;
             font-size: 1rem;
-            flex: 1;
-        }
-
-        .input-group input[type="radio"] {
-            margin-right: 5px;
+            flex: 1 1 auto;
+            min-width: 120px;
         }
 
         .input-group label {
-            font-size: 1rem;
-            white-space: nowrap;
+            font-size: 0.9rem;
         }
 
         button {
@@ -83,6 +86,7 @@
             color: #2575fc;
             font-weight: bold;
             transition: background 0.3s ease, color 0.3s ease;
+            width: 100%;
         }
 
         button:hover {
@@ -93,6 +97,7 @@
         .delete-btn {
             background: #ff4d4d;
             color: #fff;
+            width: auto;
         }
 
         .delete-btn:hover {
@@ -100,14 +105,60 @@
         }
 
         #result {
-            font-size: 1.5rem;
+            font-size: 1.2rem;
             font-weight: bold;
             text-align: center;
-            margin-top: 30px;
+            margin-top: 20px;
             padding: 10px;
             background: rgba(255, 255, 255, 0.3);
             border-radius: 10px;
             box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 1.5rem;
+            }
+
+            .section-header {
+                font-size: 1rem;
+            }
+
+            button {
+                padding: 8px 15px;
+                font-size: 0.9rem;
+            }
+
+            .input-group {
+                flex-direction: column;
+                gap: 8px;
+            }
+
+            .input-group input[type="text"], 
+            .input-group select, 
+            .input-group div {
+                flex: 1 1 auto;
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 1.2rem;
+            }
+
+            .section-header {
+                font-size: 0.9rem;
+            }
+
+            button {
+                font-size: 0.8rem;
+            }
+
+            .input-group {
+                gap: 5px;
+            }
         }
     </style>
 </head>
