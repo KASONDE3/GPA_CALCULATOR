@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GPA Calculator for 1st to 7th Year</title>
+    <style>
+        /* General Styling */
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(to right, #6a11cb, #2575fc);
+            color: #fff;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1, h2 {
+            text-align: center;
+        }
+
+        h1 {
+            margin-bottom: 30px;
+            font-size: 2.5rem;
+        }
+
+        .section-header {
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            border-bottom: 2px solid #fff;
+            padding-bottom: 5px;
+        }
+
+        .section {
+            margin-bottom: 40px;
+            background-color: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .input-group {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            margin-bottom: 15px;
+            flex-wrap: nowrap;
+        }
+
+        .input-group input[type="text"] {
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            flex: 1;
+            min-width: 150px;
+        }
+
+        .input-group select {
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            flex: 1;
+        }
+
+        .input-group input[type="radio"] {
+            margin-right: 5px;
+        }
+
+        .input-group label {
+            font-size: 1rem;
+            white-space: nowrap;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 1rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            background: #fff;
+            color: #2575fc;
+            font-weight: bold;
+            transition: background 0.3s ease, color 0.3s ease;
+        }
+
+        button:hover {
+            background: #2575fc;
+            color: #fff;
+        }
+
+        .delete-btn {
+            background: #ff4d4d;
+            color: #fff;
+        }
+
+        .delete-btn:hover {
+            background: #cc0000;
+        }
+
+        #result {
+            font-size: 1.5rem;
+            font-weight: bold;
+            text-align: center;
+            margin-top: 30px;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 10px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+        }
+    </style>
+</head>
+<body>
+    <h1>GPA Calculator</h1>
+
+    <div id="sections-container">
+        <!-- Dynamically added sections -->
+    </div>
+
+    <button id="calculate-gpa-btn">Calculate GPA</button>
+    <div id="result"></div>
+
+    <script>
+        // Grade options
+        const gradeOptions = [
+            { label: 'A+ (5.00 Distinction)', value: 5.00 },
+            { label: 'A (4.00 Distinction)', value: 4.00 },
+            { label: 'B+ (3.50 Meritorious)', value: 3.50 },
+            { label: 'B (3.00 Credit)', value: 3.00 },
+            { label: 'C+ (2.37 Credit)', value: 2.37 },
+            { label: 'C (1.00 Pass)', value: 1.00 },
+            { label: 'S (1.00 Satisfactory)', value: 1.00 },
+            { label: 'D+ (0.00 Fail)', value: 0.00 },
+            { label: 'D (0.00 Fail)', value: 0.00 },
+            { label: 'LT (0.00 Fail - Left without permission)', value: 0.00 },
+            { label: 'NE (0.00 Fail - Not examined)', value: 0.00 },
+            { label: 'DF (0.00 Deferred examination)', value: 0.00 },
+            { label: 'WP (0.00 Left with permission)', value: 0.00 },
+            { label: 'IN (0.00 Incomplete assessment)', value: 0.00 }
+        ];
+
+        // Configuration for each year
+        const yearConfig = [
+            { year: 'first-year', maxCourses: 5 },
+            { year: 'second-year', maxCourses: 8 },
+            { year: 'third-year', maxCourses: 8 },
+            { year: 'fourth-year', maxCourses: 10 },
+            { year: 'fifth-year', maxCourses: 10 },
+            { year: 'sixth-year', maxCourses: 10 },
+            { year: 'seventh-year', maxCourses: 10 },
+        ];
+
+        // Create sections for all years
+        const sectionsContainer = document.getElementById('sections-container');
+        yearConfig.forEach(({ year, maxCourses }) => {
+            const section = document.createElement('div');
+            section.className = 'section';
+            section.innerHTML = `
+                <h2 class="section-header">${year.replace('-', ' ').toUpperCase()} (Max: ${maxCourses})</h2>
+                <div id="${year}-courses"></div>
+                <button type="button" class="add-course-btn" data-limit="${maxCourses}" data-year="${year}">Add ${year.replace('-', ' ')} Course</button>
+            `;
+            sectionsContainer.appendChild(section);
+        });
+
+        // Add course functionality
+        function addCourse(event) {
+            const year = event.target.dataset.year;
+            const limit = parseInt(event.target.dataset.limit);
+            const coursesDiv = document.getElementById(`${year}-courses`);
+            const courseCount = coursesDiv.children.length;
+
+            if (courseCount >= limit) {
+                alert(`You can only add up to ${limit} courses for ${year.replace('-', ' ')}.`);
+                return;
+            }
+
+            const inputGroup = document.createElement('div');
+            inputGroup.className = 'input-group';
+            inputGroup.innerHTML = `
+                <input type="text" name="${year}-course[]" placeholder="Course Name" required>
+                <div>
+                    <label><input type="radio" name="${year}-credit-${courseCount}" value="30" required> 30</label>
+                    <label><input type="radio" name="${year}-credit-${courseCount}" value="15" required> 15</label>
+                </div>
+                <select name="${year}-grade[]" required>
+                    ${gradeOptions.map(option => `<option value="${option.value}">${option.label}</option>`).join('')}
+                </select>
+                <button type="button" class="delete-btn">Delete</button>
+            `;
+            coursesDiv.appendChild(inputGroup);
+
+            inputGroup.querySelector('.delete-btn').addEventListener('click', () => inputGroup.remove());
+        }
+
+        // Add event listeners for all year buttons
+        document.querySelectorAll('.add-course-btn').forEach(button => {
+            button.addEventListener('click', addCourse);
+        });
+
+        // Calculate GPA
+        document.getElementById('calculate-gpa-btn').addEventListener('click', () => {
+            let totalWeightedPoints = 0;
+            let totalCredits = 0;
+
+            yearConfig.forEach(({ year }) => {
+                const credits = Array.from(document.querySelectorAll(`[name^="${year}-credit-"]:checked`)).map(input => parseFloat(input.value));
+                const grades = Array.from(document.querySelectorAll(`[name="${year}-grade[]"]`)).map(select => parseFloat(select.value));
+
+                for (let i = 0; i < credits.length; i++) {
+                    totalWeightedPoints += credits[i] * grades[i];
+                    totalCredits += credits[i];
+                }
+            });
+
+            const gpa = totalCredits > 0 ? (totalWeightedPoints / totalCredits).toFixed(2) : 0;
+            document.getElementById('result').textContent = `Your GPA is: ${gpa}`;
+        });
+    </script>
+</body>
+</html>
